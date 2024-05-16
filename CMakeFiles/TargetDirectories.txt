@@ -1,0 +1,3 @@
+/mnt/m2_1/Coding/CPP/WHGPP/CMakeFiles/WHGPP.dir
+/mnt/m2_1/Coding/CPP/WHGPP/CMakeFiles/edit_cache.dir
+/mnt/m2_1/Coding/CPP/WHGPP/CMakeFiles/rebuild_cache.dir
