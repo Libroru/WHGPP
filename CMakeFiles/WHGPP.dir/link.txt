@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/WHGPP.dir/main.cpp.o -o WHGPP  /usr/lib/libSDL2main.a /usr/lib/libSDL2-2.0.so.0.3000.3
