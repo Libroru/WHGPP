@@ -6,6 +6,7 @@
 #include <SDL2/SDL_video.h>
 #include <cstdint>
 #include <stdio.h>
+#include "../lib/whgmath.hpp"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -13,35 +14,6 @@ const int SCREEN_HEIGHT = 480;
 SDL_Window *g_window = NULL;
 SDL_Surface *g_screenSurface = NULL;
 SDL_Renderer *g_renderer = NULL;
-
-class Vector2 {
-public:
-  float x;
-  float y;
-
-  Vector2 (float _posX, float _posY) {
-    x = _posX;
-    y = _posY;
-  };
-
-  Vector2 normalized() {
-    float x = this->x / 2;
-    float y = this->y / 2;
-    return Vector2(x, y);
-  };
-
-  Vector2 operator* (float value) {
-     float x = this->x * value;
-     float y = this->y * value;
-     return Vector2(x, y);
-  };
-
-  Vector2 operator+ (Vector2 &vector2) {
-    float x = this->x + vector2.x;
-    float y = this->y + vector2.y;
-    return Vector2(x, y);
-  };
-};
 
 class Player {
 public:
