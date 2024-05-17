@@ -6,7 +6,8 @@
 #include <SDL2/SDL_video.h>
 #include <cstdint>
 #include <stdio.h>
-#include "../lib/whgmath.hpp"
+#include "math/vectors.hpp"
+#include "entity/player.hpp"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -14,77 +15,6 @@ const int SCREEN_HEIGHT = 480;
 SDL_Window *g_window = NULL;
 SDL_Surface *g_screenSurface = NULL;
 SDL_Renderer *g_renderer = NULL;
-
-class Player {
-public:
-  const float MOVEMENT_SPEED = 500.0f;
-  const float PLAYER_SIZE = 50.0f;
-  const float OUTLINE_WIDTH = 10.0f;
-
-  void process(float deltaTime) {
-    move(deltaTime);
-
-    // printf("Pos(%f/%f), Vel(%f/%f)\n", _position.x, _position.y, _velocity.x, _velocity.y);
-
-    float outlineSize = PLAYER_SIZE + OUTLINE_WIDTH;
-
-    SDL_FRect playerOutlineRect = {_position.x - OUTLINE_WIDTH / 2,
-                                  _position.y - OUTLINE_WIDTH / 2, outlineSize,
-                                  outlineSize};
-    SDL_SetRenderDrawColor(g_renderer, 0x75, 0x00, 0x00, 0xff);
-    SDL_RenderFillRectF(g_renderer, &playerOutlineRect);
-
-    SDL_FRect playerRect = {_position.x, _position.y, 50, 50};
-    SDL_SetRenderDrawColor(g_renderer, 0xfe, 0x00, 0x00, 0xff);
-    SDL_RenderFillRectF(g_renderer, &playerRect);
-  }
-
-  void processMovement(SDL_Event &e) {
-    // Using a key.repeat of 0 here,
-    // because we don't want multiple inputs in here
-    if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
-      switch (e.key.keysym.sym) {
-      case SDLK_w:
-        _velocity.y -= 1.0f;
-        break;
-      case SDLK_s:
-        _velocity.y += 1.0f;
-        break;
-      case SDLK_a:
-        _velocity.x -= 1.0f;
-        break;
-      case SDLK_d:
-        _velocity.x += 1.0f;
-        break;
-      }
-    } else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
-      switch (e.key.keysym.sym) {
-      case SDLK_w:
-        _velocity.y += 1.0f;
-        break;
-      case SDLK_s:
-        _velocity.y -= 1.0f;
-        break;
-      case SDLK_a:
-        _velocity.x += 1.0f;
-        break;
-      case SDLK_d:
-        _velocity.x -= 1.0f;
-        break;
-      }
-    }
-  };
-
-  void move(float deltaTime) {
-    Vector2 velocity = Vector2(_velocity * deltaTime).normalized();
-    velocity = velocity * MOVEMENT_SPEED;
-    _position = _position + velocity;
-  }
-
-private:
-  Vector2 _position = Vector2(0.0f, 0.0f);
-  Vector2 _velocity = Vector2(0.0f, 0.0f);
-};
 
 bool init() {
   /* Initialize defaults, Video and Audio */
@@ -105,7 +35,7 @@ bool init() {
   }
 
   // Create SDL Renderer
-  g_renderer = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
+  g_renderer = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
   // Check for errors on creation
   if (g_renderer == NULL) {
@@ -141,6 +71,8 @@ int main(int argc, char *argv[]) {
     exit(-1);
   }
 
+  printf("Successfully initialized SDL.\n");
+
   Player *player = new Player();
 
   SDL_Event e;
@@ -167,7 +99,7 @@ int main(int argc, char *argv[]) {
     SDL_SetRenderDrawColor(g_renderer, 0xb0, 0xa4, 0xfc, 0xff);
     SDL_RenderClear(g_renderer);
 
-    player->process(deltaTime);
+    player->process(deltaTime, g_renderer);
 
     // Render frame
     SDL_RenderPresent(g_renderer);
