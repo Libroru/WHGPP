@@ -11,6 +11,8 @@ include_directories(${SDL2_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_executable(WHGPP src/main.cpp
         src/math/vectors.cpp
         src/entity/player.cpp
+        src/entity/rotating_balls.cpp
+        src/core/game_manager.cpp
 )
 
 target_link_libraries(WHGPP ${SDL2_LIBRARIES})

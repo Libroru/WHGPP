@@ -2,7 +2,7 @@
 // Created by user on 17.05.24.
 //
 
-#include "player.hpp"
+#include "player.h"
 #include <SDL2/SDL_render.h>
 
 void Player::process(float deltaTime, SDL_Renderer *renderer) {
@@ -10,18 +10,25 @@ void Player::process(float deltaTime, SDL_Renderer *renderer) {
 
     // printf("Pos(%f/%f), Vel(%f/%f)\n", _position.x, _position.y, _velocity.x, _velocity.y);
 
-    float outlineSize = PLAYER_SIZE + OUTLINE_WIDTH;
+    float outlineSize = PLAYER_SIZE + 2 * OUTLINE_WIDTH;
 
-    SDL_FRect playerOutlineRect = {_position.x - OUTLINE_WIDTH / 2,
-                                  _position.y - OUTLINE_WIDTH / 2, outlineSize,
-                                  outlineSize};
+    // Center the outline rectangle around the player's position
+    SDL_FRect playerOutlineRect = {
+        _position.x - OUTLINE_WIDTH,
+        _position.y - OUTLINE_WIDTH,
+        outlineSize,
+        outlineSize
+    };
+
     SDL_SetRenderDrawColor(renderer, 0x75, 0x00, 0x00, 0xff);
     SDL_RenderFillRectF(renderer, &playerOutlineRect);
 
-    SDL_FRect playerRect = {_position.x, _position.y, 50, 50};
+    // Player's rectangle
+    SDL_FRect playerRect = {_position.x, _position.y, PLAYER_SIZE, PLAYER_SIZE};
     SDL_SetRenderDrawColor(renderer, 0xfe, 0x00, 0x00, 0xff);
     SDL_RenderFillRectF(renderer, &playerRect);
 }
+
 
 void Player::processMovement(SDL_Event &e) {
     // Using a key.repeat of 0 here,
